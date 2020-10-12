@@ -6,20 +6,20 @@ const rolesValidos = {
     message: '{VALUE} no es un rol permitido'
 }
 
-const usuarioSchema = new Schema({
+const UsuarioSchema = new Schema({
 
   nombre: { 
       type: String, 
-      required: [true, "El nombre es necesario"] 
+      required: true
     },
   email: {
     type: String,
     unique: true,
-    required: [true, "El correo es necesario"],
+    required: true
   },
   password: { 
       type: String, 
-      required: [true, "La contraseña es necesario"] 
+      required: true
     },
   img: { 
       type: String, required: false 
@@ -35,6 +35,12 @@ const usuarioSchema = new Schema({
     },
 });
 
-usuarioSchema.plugin(uniqueValidator,{message: '{PATH} debe ser unico'});
+UsuarioSchema.method('toJSON', function() {
+    const {__v, _id, password,...object} = this.toObject();
+    return object;
+})
 
-module.exports = model('Usuario',usuarioSchema);
+
+// usuarioSchema.plugin(uniqueValidator,{message: '{PATH} debe ser unico'});
+
+module.exports = model('Usuario',UsuarioSchema);
